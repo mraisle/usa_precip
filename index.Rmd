@@ -1,0 +1,48 @@
+---
+title: "Airport Precip Locations"
+author: "Meg Raisle"
+date: "4/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+library(riem)
+library(sf)
+library(leaflet)
+library(mapview)
+```
+
+
+## Data Acquistion 
+
+``` {r}
+network <- riem_networks()
+
+co_riem <- riem_stations(network = "CO_ASOS")
+
+#projection is wgs 84
+co_spatial <- st_as_sf(co_riem, coords=c('lon', 'lat'), crs=4326)
+
+plot(co_spatial)
+
+
+```
+
+## Interactive Map
+
+
+``` {r}
+m <- leaflet(co_spatial) %>%
+  addTiles() %>% #add default open street map
+  addCircleMarkers()
+m
+
+```
+
+## Interactive Map with MapView
+
+``` {r}
+
+mapview(co_spatial, selfcontainded = FALSE)
+```
